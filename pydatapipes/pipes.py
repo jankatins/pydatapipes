@@ -135,8 +135,11 @@ def make_pipesource(cls):
 
         cls.__orig_rshift__ = cls.__rshift__
         cls.__rshift__ = __rshift__
-        setattr(cls.__rshift__, "pipeoperator", True)
-
+        try:
+            cls.__rshift__.pipeoperator = True
+        except AttributeError:
+            # py27
+            cls.__rshift__.__func__.pipeoperator = True
 
 def singledispatch_pipeverb(func):
     """

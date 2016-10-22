@@ -98,6 +98,7 @@ def test_singledispatch_pipeverb():
 def test_make_pipesource():
     class Tester():
         def __rshift__(self, other):
+            """ORIG RSHIFT"""
             return "TESTER"
 
     @singledispatch_pipeverb
@@ -106,14 +107,22 @@ def test_make_pipesource():
 
     assert Tester() >> 1 == "TESTER"
     assert Tester() >> test_verb() == "TESTER"
+    assert not hasattr(Tester.__rshift__, "pipeoperator")
 
     make_pipesource(Tester)
 
     assert "Pipeline" in Tester.__rshift__.__doc__
+    assert Tester.__rshift__.pipeoperator
+    assert hasattr(Tester.__rshift__, "pipeoperator")
     assert hasattr(Tester, "__orig_rshift__")
     assert Tester().__orig_rshift__(1) == "TESTER"
     assert Tester() >> test_verb() == "VERB"
     assert Tester() >> 1 == "TESTER"
+
+    # assure that we don't replace twice!
+    make_pipesource(Tester)
+    assert Tester().__orig_rshift__(1) == "TESTER"
+    assert "ORIG RSHIFT" in Tester().__orig_rshift__.__doc__
 
 
 def test_PipeVerb():
