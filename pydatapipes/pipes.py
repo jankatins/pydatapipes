@@ -14,7 +14,7 @@ import functools
 # reexport singledispatch so that library developers don't need to implement the same logic...
 __all__ = ['singledispatch', 'PipeVerb', 'pipeverb', 'make_pipesource', 'singledispatch_pipeverb']
 
-class PipeVerb():
+class PipeVerb(object):
     """Object which represents a part of a pipeline
 
     An object of this class can be used as part of a data pipeline: ``1 >> PipeVerb(lambda x: x)``

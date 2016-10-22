@@ -96,7 +96,7 @@ def test_singledispatch_pipeverb():
 
 
 def test_make_pipesource():
-    class Tester():
+    class Tester(object):
         def __rshift__(self, other):
             """ORIG RSHIFT"""
             return "TESTER"
